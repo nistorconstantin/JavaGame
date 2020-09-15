@@ -11,8 +11,7 @@ public class Entity {
     private float rotX, rotY, rotZ;
     private Vector3f scale;
 
-    public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
-                  Vector3f scale) {
+    public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,Vector3f scale) {
         this.model = model;
         this.position = position;
         this.rotX = rotX;

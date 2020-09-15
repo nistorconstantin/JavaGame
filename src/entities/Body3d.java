@@ -17,7 +17,7 @@ public class Body3d {
 
     //
     private float rotX, rotY, rotZ;
-
+//(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, Vector3f scale)
     public Body3d(TexturedModel model, Vector3f position, Vector3f velocity) {
         this.model = model;
         this.position = position;

@@ -50,7 +50,7 @@ public class MainClass {
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++) {
                 if(i < 5){
-                    //entities.add(new Entity(treeModel, (new Vector3f(i * 100, 0, j * 100)), 0, 0, 0,new Vector3f(15,15,15)));
+                    entities.add(new Entity(treeModel, (new Vector3f(i * 100, 0, j * 100)), 0, 0, 0,new Vector3f(15,15,15)));
                 }else{
                     entities.add(new Entity(tubeModel, (new Vector3f(i * 100, 0, j * 100)), 0, 0, 0, new Vector3f(150,1,1)));
                 }

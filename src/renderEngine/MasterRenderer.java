@@ -1,5 +1,6 @@
 package renderEngine;
 
+import entities.Body3d;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -24,11 +25,13 @@ public class MasterRenderer {
 
     private StaticShader entityShader;
     private EntityRenderer entityRenderer;
+    private Body3dRenderer body3dRenderer;
 
     private TerrainShader terrainShader;
     private TerrainRenderer terrainRenderer;
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel,List<Entity>>();
+    private Map<TexturedModel, List<Body3d>> bodies3d = new HashMap<TexturedModel,List<Body3d>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
 
     public MasterRenderer(){
@@ -55,6 +58,8 @@ public class MasterRenderer {
         entityRenderer = new EntityRenderer(entityShader,projectionMatrix);
 
         terrainRenderer = new TerrainRenderer(terrainShader,projectionMatrix);
+
+        body3dRenderer = new Body3dRenderer(entityShader,projectionMatrix);
     }
 
     public void render(Light sun, Camera camera){
@@ -73,6 +78,13 @@ public class MasterRenderer {
         entityRenderer.render(entities);
         entityShader.stop();
         entities.clear();
+
+        entityShader.start();
+        entityShader.loadLight(sun);
+        entityShader.loadViewMatrix(camera);
+        body3dRenderer.render(bodies3d);
+        entityShader.stop();
+        entities.clear();
     }
 
     public void processEntity(Entity entity){
@@ -84,6 +96,18 @@ public class MasterRenderer {
            List<Entity> newBatch = new ArrayList<Entity>();
            newBatch.add(entity);
            entities.put(entityModel,newBatch);
+        }
+    }
+
+    public void processBody3d(Body3d body3d){
+        TexturedModel body3dModel = body3d.getModel();
+        List<Body3d> batch = bodies3d.get(body3dModel);
+        if(batch!=null){
+            batch.add(body3d);
+        }else{
+            List<Body3d> newBatch = new ArrayList<Body3d>();
+            newBatch.add(body3d);
+            bodies3d.put(body3dModel,newBatch);
         }
     }
 

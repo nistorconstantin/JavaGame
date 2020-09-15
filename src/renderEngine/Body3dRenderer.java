@@ -1,5 +1,6 @@
 package renderEngine;
 
+import entities.Body3d;
 import entities.Entity;
 import models.RawModel;
 import models.TexturedModel;
@@ -8,6 +9,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import shaders.StaticShader;
 import textures.ModelTexture;
 import toolbox.Maths;
@@ -15,10 +17,10 @@ import toolbox.Maths;
 import java.util.List;
 import java.util.Map;
 
-public class EntityRenderer {
+public class Body3dRenderer {
     private StaticShader shader;
 
-    public EntityRenderer(StaticShader shader,Matrix4f projectionMatrix)
+    public Body3dRenderer(StaticShader shader, Matrix4f projectionMatrix)
     {
         this.shader = shader;
 
@@ -27,15 +29,15 @@ public class EntityRenderer {
         this.shader.stop();
     }
 
-    public void render(Map<TexturedModel, List<Entity>> entities)
+    public void render(Map<TexturedModel, List<Body3d>> bodies3d)
     {
-        for(TexturedModel model:entities.keySet()){
+        for(TexturedModel model:bodies3d.keySet()){
 
             preparaTexturedModel(model);
-            List<Entity> batch = entities.get(model);
+            List<Body3d> batch = bodies3d.get(model);
 
-            for(Entity entity: batch){
-                prepareInstance(entity);
+            for(Body3d body3d: batch){
+                prepareInstance(body3d);
                 GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
             }
             unbindTexturedModel();
@@ -70,9 +72,9 @@ public class EntityRenderer {
         GL30.glBindVertexArray(0);
     }
 
-    private void prepareInstance(Entity entity){
-        Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
+    private void prepareInstance(Body3d body3d){
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(body3d.getPosition(),
+                body3d.getRotX(), body3d.getRotY(), body3d.getRotZ(), new Vector3f(1,1,1));
         shader.loadTransformationMatrix(transformationMatrix);
     }
-
 }
